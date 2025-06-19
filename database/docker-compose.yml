@@ -1,0 +1,64 @@
+services:
+  postgres:
+    build: .
+    container_name: ecli-postgres
+    # This tells Docker Compose to load variables from the .env file
+    # into the container's environment, making them accessible to your Python scripts.
+    env_file:
+      - ./.env
+    # These variables are used by PostgreSQL itself during initialization.
+    # They will be overridden by the values in your .env file.
+    environment:
+      POSTGRES_DB: ${DB_NAME:-ecli_rag_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-As!101010}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      # Persist database data across container restarts
+      - postgres_data:/var/lib/postgresql/data
+      # Mount your local JSON files directory as read-only into the container
+      # IMPORTANT: Update the path on the left to your actual JSONs directory
+      - d:/jsons:/app/jsons:ro
+      # Mount application scripts for live editing
+      - .:/app
+      # Mount a directory for backups
+      - ./backups:/backups
+    networks:
+      - ecli_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ecli-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@ecli.local
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - ecli_network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  ecli_network:
+    driver: bridge

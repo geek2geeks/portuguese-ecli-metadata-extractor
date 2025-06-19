@@ -1,0 +1,25 @@
+# Essential packages for Portuguese ECLI RAG System
+
+# Database connectivity
+psycopg2-binary>=2.9.0
+
+# Data processing
+pandas>=1.5.0
+
+# Progress bars and utilities
+tqdm>=4.64.0
+
+# Environment variable support
+python-dotenv>=1.0.0
+
+# Optional: For corpus analyzer visualizations
+# Uncomment these lines if you want to generate charts:
+# matplotlib>=3.6.0
+# seaborn>=0.12.0
+# numpy>=1.24.0
+
+# Optional: For enhanced JSON processing
+# jsonschema>=4.17.0
+
+# Optional: For better logging
+# colorlog>=6.7.0
