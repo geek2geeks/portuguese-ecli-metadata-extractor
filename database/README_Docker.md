@@ -30,7 +30,7 @@ You should see:
   - Password: `your_secure_password`
 - **pgAdmin**: http://localhost:8080
   - Email: `admin@ecli.com`
-  - Password: `admin123`
+  - Password: the value of `PGADMIN_DEFAULT_PASSWORD` in `database/.env`
 
 ## Loading JSON Data
 

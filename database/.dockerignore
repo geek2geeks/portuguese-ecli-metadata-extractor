@@ -1,0 +1,8 @@
+.env
+.env.*
+__pycache__/
+*.py[cod]
+*.log
+.pytest_cache/
+backups/
+jsons/

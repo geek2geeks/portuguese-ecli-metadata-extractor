@@ -1,0 +1,4 @@
+# Dependencies for ecli_extractor_oneshot.py (the one-shot ECLI PDF extractor)
+# Referenced by README_oneshot.md. The extractor itself only needs PyMuPDF
+# (imported as `fitz`); everything else it uses is the Python standard library.
+PyMuPDF>=1.23.0

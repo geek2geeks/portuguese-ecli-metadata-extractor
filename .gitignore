@@ -61,3 +61,10 @@ venv.bak/
 *.log
 .DS_Store
 .ipynb_checkpoints
+
+# Generated at runtime by the batch/test scripts and the Docker setup
+logs/
+backups/
+database/backups/
+database/jsons/
+.pytest_cache/
