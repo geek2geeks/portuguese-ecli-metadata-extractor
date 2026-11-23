@@ -14,7 +14,9 @@ RUN apk add --no-cache \
 # Set environment variables
 ENV POSTGRES_DB=ecli_rag_db
 ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=As!101010
+# POSTGRES_PASSWORD is intentionally NOT set here: a password baked into the
+# image would be published with the repository. Supply it at runtime
+# (docker-compose.yml reads DB_PASSWORD from database/.env).
 ENV PYTHONPATH=/app
 
 # Create app directory

@@ -49,11 +49,11 @@ database/
 - **PostgreSQL**: `localhost:5432`
   - Database: `ecli_rag_db`
   - User: `postgres`
-  - Password: `As!101010`
+  - Password: the value of `DB_PASSWORD` in `database/.env`
 
 - **pgAdmin**: `http://localhost:8080`
   - Email: `admin@ecli.local`
-  - Password: `admin123`
+  - Password: the value of `PGADMIN_DEFAULT_PASSWORD` in `database/.env`
 
 ## 💾 Data Persistence & Portability
 

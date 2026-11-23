@@ -4,23 +4,26 @@ services:
     container_name: ecli-postgres
     # This tells Docker Compose to load variables from the .env file
     # into the container's environment, making them accessible to your Python scripts.
+    # A fresh clone has no .env yet, so the file is optional: Compose must not
+    # refuse to parse/start the project because of it.
     env_file:
-      - ./.env
+      - path: ./.env
+        required: false
     # These variables are used by PostgreSQL itself during initialization.
     # They will be overridden by the values in your .env file.
     environment:
       POSTGRES_DB: ${DB_NAME:-ecli_rag_db}
       POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-As!101010}
+      POSTGRES_PASSWORD: "${DB_PASSWORD:?DB_PASSWORD is required - copy .env.example to .env and set it}"
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:
       # Persist database data across container restarts
       - postgres_data:/var/lib/postgresql/data
-      # Mount your local JSON files directory as read-only into the container
-      # IMPORTANT: Update the path on the left to your actual JSONs directory
-      - d:/jsons:/app/jsons:ro
+      # Mount the JSON directory (database/jsons by default) read-only.
+      # Relative path so the project stays portable across machines.
+      - ./jsons:/app/jsons:ro
       # Mount application scripts for live editing
       - .:/app
       # Mount a directory for backups
@@ -40,8 +43,8 @@ services:
     image: dpage/pgadmin4:latest
     container_name: ecli-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@ecli.local
-      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@ecli.local}
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD:?PGADMIN_DEFAULT_PASSWORD is required - copy .env.example to .env and set it}"
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
       - "8080:80"
